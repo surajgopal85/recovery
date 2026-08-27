@@ -9,8 +9,9 @@ export default function Control() {
   const [value, setValue] = useState(inventory.controllablePart ?? "");
   return (
     <FlowScreen
+      eyebrow="Responsibility, not blame"
       title="What part of this is within your control?"
-      body="Not everything that happened is your responsibility. For now, focus only on what you can honestly act on."
+      body="You don't have to take responsibility for everything that happened. But change begins where your choices begin."
       footer={
         <PrimaryButton
           label="CONTINUE"
