@@ -18,7 +18,7 @@ export default function Commitment() {
   return (
     <FlowScreen
       title="One honest action."
-      body="You do not need to solve your whole life right now. Do this one thing.\n\nWhen will you do it?"
+      body={"You do not need to solve your whole life right now. Do this one thing.\n\nWhen will you do it?"}
       footer={
         <PrimaryButton
           label="COMMIT"

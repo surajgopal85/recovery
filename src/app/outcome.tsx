@@ -23,7 +23,7 @@ export default function Outcome() {
   const value = text.trim() || choice;
   return (
     <FlowScreen
-      title="What would getting better give you back?"
+      title="If this started getting better, what would you most want back?"
       body="Choose what feels closest, or use your own words."
       footer={
         <PrimaryButton
