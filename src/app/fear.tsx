@@ -36,14 +36,14 @@ export default function Fear() {
         <ResponseTransition
           visible
           title="Honesty feels risky."
-          body="But avoiding this has a cost too. You don't have to face everything today \u2014 just enough to take one honest step."
+          body="But avoiding this has a cost too. You don't have to face everything today — just enough to take one honest step."
         />
       ) : (
         <Field
           autoFocus
           value={value}
           onChangeText={setValue}
-          placeholder="Name the fear as plainly as you can\u2026"
+          placeholder="Name the fear as plainly as you can…"
         />
       )}
     </FlowScreen>
