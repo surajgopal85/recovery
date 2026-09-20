@@ -1,7 +1,7 @@
 import { Inventory, RecoveryAction, RecoveryProfile } from "@/types/recovery";
 
 const action = (title: string, detail: string): RecoveryAction => ({
-  id: `action-${Date.now()}`,
+  id: `action-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
   title,
   detail,
   status: "proposed",
@@ -22,7 +22,7 @@ export function suggestedActions(
         "Tell them plainly what is happening and ask them to stay connected with you.",
       ),
       action(
-        "Remove access to something that is hurting me",
+        "Remove access to something that's hurting me",
         "Create distance from the substance or situation right now.",
       ),
       action(
