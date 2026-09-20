@@ -8,6 +8,14 @@ test('first launch loads empty state without redirecting away from arrival', () 
   assert.deepEqual(decodeState(null), emptyState());
   assert.equal(resumeRoute(decodeState(null)), '/');
 });
+test('soberDate survives serialization and rejects malformed values', () => {
+  const saved = { ...state(), profile: { ...state().profile, soberDate: '2026-01-15' } };
+  assert.deepEqual(decodeState(encodeState(saved)), saved);
+  for (const bad of ['not-a-date', '2026-13-01', '01/15/2026', 12345]) {
+    const withBadDate = { ...state(), profile: { ...state().profile, soberDate: bad } };
+    assert.throws(() => decodeState(encodeState(withBadDate)));
+  }
+});
 test('submitted profile, inventory, commitment and completion survive serialization', () => {
   for (const status of ['proposed', 'committed', 'completed', 'revisited']) {
     const saved = state(); saved.currentAction = { ...action, status };

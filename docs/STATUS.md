@@ -12,6 +12,7 @@
 - Starting a new inventory clears inventory/current action together while retaining the profile.
 - Missing actions redirect next-action, smaller, and commitment to action selection instead of showing a blank screen or an inert commitment button.
 - Fixed two unrendered unicode escapes in `fear.tsx`: JSX plain attribute strings (`attr="..."`) don't parse JS escape sequences the way expression containers do, so `\u2014`/`\u2026` were printing as literal text. Replaced with the literal characters, matching the convention already used elsewhere.
+- Added sober-date tracking on Home, closing the last unbuilt required-MVP item: `RecoveryProfile.soberDate` (validated ISO date), set via three inline numeric fields (month/day/year, no new dependency), replacing the "One day at a time" placeholder with a real computed duration ("Day 1" → "N days" → "X months, Y days" → "X years[, Y months]"), editable after the fact. Lives on `profile` rather than `inventory` since it should survive an inventory reset. Persistence validation extended to reject malformed/future dates.
 
 ## Validation (2026-09-20)
 
@@ -22,6 +23,7 @@
 - Headless Chrome against the web export: submitted onboarding persists and resumes; restored commitment can be completed and survives reload; inventory reset survives restart and preserves profile; three missing-action routes recover; simulated storage write failure displays retry and saves after recovery; malformed data stays untouched and load retry recovers after storage is repaired. No browser runtime errors.
 - Independently reproduced in a separate clean worktree rather than trusted from the branch's own report: typecheck, full test suite, lint, and web export all reran clean.
 - Native device (iOS simulator): confirmed via repeated force-quit/restart that saved progress persists and resumes correctly. Missing-action redirects were not manually forced on-device — covered instead by the unit tests and the code being a simple, type-checked guard clause.
+- `npm test` (re-run after sober-date changes): 16 persistence + duration tests passed, including a soberDate round-trip and malformed-date rejection case.
 - Browser storage fixtures were used for commitment/restoration cases. This is not a full end-to-end onboarding test.
 
 ## Decisions and limits
@@ -35,6 +37,5 @@
 
 ## Recommended next tasks
 
-1. Run a product copy/UX review on iOS and Android devices.
+1. Run a product copy/UX review on iOS and Android devices — now including the new sober-date entry UI on Home, which hasn't had eyes on it on a real device yet.
 2. Add focused interaction tests for the full happy path and suggestion branches beyond persistence.
-3. Decide the sober-date UX — the persistence layer now supports adding it, but sober-date collection/display itself isn't built.

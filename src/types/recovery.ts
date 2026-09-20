@@ -2,6 +2,7 @@ export type RecoveryProfile = {
   struggle?: string;
   strugglePatterns: string[];
   desiredOutcome?: string;
+  soberDate?: string;
 };
 
 export type Inventory = {

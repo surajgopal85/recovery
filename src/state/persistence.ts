@@ -18,6 +18,11 @@ const strings = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === "string");
 const optionalStrings = (value: Record<string, unknown>, keys: string[]) =>
   keys.every((key) => value[key] === undefined || typeof value[key] === "string");
+const isSoberDate = (value: unknown) =>
+  value === undefined ||
+  (typeof value === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    !Number.isNaN(Date.parse(value)));
 
 // Reject unknown versions and malformed data without overwriting the original.
 export function decodeState(raw: string | null): RecoveryState {
@@ -29,6 +34,7 @@ export function decodeState(raw: string | null): RecoveryState {
   if (
     !record(profile) || !strings(profile.strugglePatterns) ||
     !optionalStrings(profile, ["struggle", "desiredOutcome"]) ||
+    !isSoberDate(profile.soberDate) ||
     !record(inventory) || !strings(inventory.affectedPeople) ||
     !optionalStrings(inventory, ["category", "description", "controllablePart", "honestyFear"])
   ) throw new Error("Invalid recovery data");

@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PrimaryButton, SecondaryButton } from "@/components/Controls";
 import { useRecovery } from "@/state/RecoveryContext";
+import { formatDuration, toISODate } from "@/utils/duration";
 export default function Home() {
   const router = useRouter();
-  const { currentAction, setCurrentAction, resetInventory } = useRecovery();
+  const { profile, setProfile, currentAction, setCurrentAction, resetInventory } =
+    useRecovery();
   const start = () => {
     resetInventory();
     router.push("/carrying");
@@ -13,6 +16,19 @@ export default function Home() {
   const complete = currentAction
     ? { ...currentAction, status: "completed" as const }
     : undefined;
+  const [editingSoberDate, setEditingSoberDate] = useState(false);
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [year, setYear] = useState("");
+  const soberDateInput = toISODate(Number(year), Number(month), Number(day));
+  const saveSoberDate = () => {
+    if (!soberDateInput) return;
+    setProfile({ soberDate: soberDateInput });
+    setEditingSoberDate(false);
+    setMonth("");
+    setDay("");
+    setYear("");
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.page}>
@@ -60,7 +76,69 @@ export default function Home() {
         ) : null}
         <View style={styles.recovery}>
           <Text style={styles.label}>RECOVERY</Text>
-          <Text style={styles.recoveryText}>One day at a time.</Text>
+          {profile.soberDate && !editingSoberDate ? (
+            <>
+              <Text style={styles.recoveryText}>
+                {formatDuration(profile.soberDate)}
+              </Text>
+              <Pressable onPress={() => setEditingSoberDate(true)}>
+                <Text style={styles.editLink}>EDIT SOBER DATE</Text>
+              </Pressable>
+            </>
+          ) : (
+            <>
+              <Text style={styles.recoveryPrompt}>
+                {profile.soberDate
+                  ? "Update your sober date"
+                  : "When did your recovery start?"}
+              </Text>
+              <View style={styles.dateRow}>
+                <TextInput
+                  value={month}
+                  onChangeText={setMonth}
+                  placeholder="MM"
+                  placeholderTextColor="#89918B"
+                  keyboardType="number-pad"
+                  maxLength={2}
+                  style={styles.dateField}
+                />
+                <TextInput
+                  value={day}
+                  onChangeText={setDay}
+                  placeholder="DD"
+                  placeholderTextColor="#89918B"
+                  keyboardType="number-pad"
+                  maxLength={2}
+                  style={styles.dateField}
+                />
+                <TextInput
+                  value={year}
+                  onChangeText={setYear}
+                  placeholder="YYYY"
+                  placeholderTextColor="#89918B"
+                  keyboardType="number-pad"
+                  maxLength={4}
+                  style={[styles.dateField, styles.yearField]}
+                />
+              </View>
+              <PrimaryButton
+                label="SAVE"
+                disabled={!soberDateInput}
+                onPress={saveSoberDate}
+              />
+              {profile.soberDate ? (
+                <SecondaryButton
+                  label="CANCEL"
+                  onPress={() => {
+                    setEditingSoberDate(false);
+                    setMonth("");
+                    setDay("");
+                    setYear("");
+                  }}
+                />
+              ) : null}
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -116,4 +194,26 @@ const styles = StyleSheet.create({
   done: { color: "#2D5A49", fontSize: 15, lineHeight: 22 },
   recovery: { marginTop: "auto", paddingTop: 22 },
   recoveryText: { color: "#3F5047", fontSize: 17, marginTop: 8 },
+  recoveryPrompt: { color: "#56625B", fontSize: 15, marginTop: 8 },
+  editLink: {
+    color: "#527361",
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.4,
+    marginTop: 10,
+  },
+  dateRow: { flexDirection: "row", gap: 10, marginTop: 14, marginBottom: 16 },
+  dateField: {
+    backgroundColor: "#FBFAF6",
+    borderColor: "#D8D8CE",
+    borderRadius: 12,
+    borderWidth: 1,
+    color: "#24372F",
+    fontSize: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    textAlign: "center",
+    width: 56,
+  },
+  yearField: { width: 76 },
 });
