@@ -60,7 +60,7 @@ Keep it concise and current. Do not turn it into a chronological diary.
 ## Working style
 
 Before coding:
-1. inspect the existing repo
+1. inspect the existing repo, including other active branches (`git branch -r` / `git log origin/main..<branch>`) — not just the branch you're starting from
 2. read relevant product docs
 3. state any material assumptions
 
