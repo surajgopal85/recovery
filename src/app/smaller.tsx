@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { FlowScreen } from "@/components/FlowScreen";
 import { PrimaryButton } from "@/components/Controls";
@@ -8,7 +8,7 @@ export default function Smaller() {
   const router = useRouter();
   const { currentAction, setCurrentAction } = useRecovery();
   const smaller = currentAction ? smallerVersion(currentAction) : undefined;
-  if (!smaller) return null;
+  if (!smaller) return <Redirect href="/honest-action" />;
   return (
     <FlowScreen
       title="Help me make this smaller"

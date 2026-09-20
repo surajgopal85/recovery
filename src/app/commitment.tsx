@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { FlowScreen } from "@/components/FlowScreen";
 import {
   Field,
@@ -15,6 +15,7 @@ export default function Commitment() {
   const [timing, setTiming] = useState<string>();
   const [custom, setCustom] = useState("");
   const valid = timing && (timing !== "Choose a time" || custom.trim());
+  if (!currentAction) return <Redirect href="/honest-action" />;
   return (
     <FlowScreen
       title="One honest action."

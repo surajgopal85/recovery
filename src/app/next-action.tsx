@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { FlowScreen } from "@/components/FlowScreen";
 import { PrimaryButton, SecondaryButton } from "@/components/Controls";
@@ -7,7 +7,7 @@ import { useRecovery } from "@/state/RecoveryContext";
 export default function NextAction() {
   const router = useRouter();
   const { profile, inventory, currentAction } = useRecovery();
-  if (!currentAction) return null;
+  if (!currentAction) return <Redirect href="/honest-action" />;
 
   const carrying = inventory.category?.toLowerCase() ?? "something difficult";
   const fear = inventory.honestyFear?.toLowerCase() ?? "of what comes next";
