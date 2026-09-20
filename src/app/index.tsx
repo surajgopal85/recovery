@@ -1,10 +1,15 @@
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PrimaryButton } from "@/components/Controls";
 
+import { useRecovery } from "@/state/RecoveryContext";
+import { resumeRoute } from "@/state/persistence";
+
 export default function Arrival() {
   const router = useRouter();
+  const route = resumeRoute(useRecovery());
+  if (route !== "/") return <Redirect href={route} />;
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.content}>
